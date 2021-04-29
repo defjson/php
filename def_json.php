@@ -2,12 +2,24 @@
 
 /**
  * @param $url
- * @param $data
+ * @param array $data
+ * @param null $callback
+ *
  * @return false|string
  */
-function def_json($url, $data)
+function def_json($url, array $data = [], $callback = null)
 {
-    $json = json_encode($data);
+    $json = '{}';
+
+    if (!empty($data)) {
+        $json = json_encode($data);
+    }
+
     file_put_contents($url, $json);
+
+    if (is_callable($callback)) {
+        $callback($json);
+    }
+
     return $json;
 }
