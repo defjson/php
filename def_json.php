@@ -15,6 +15,16 @@ function def_json($url, array $data = [], $callback = null)
         $json = json_encode($data);
     }
 
+    if ($json === false) {
+        // Avoid echo of empty string (which is invalid JSON), and
+        // JSONify the error message instead:
+        $json = json_encode(["jsonError" => json_last_error_msg()]);
+        if ($json === false) {
+            // This should not happen, but we go all the way now:
+            $json = '{"jsonError":"unknown"}';
+        }
+    }
+
     file_put_contents($url, $json);
 
     if (is_callable($callback)) {
