@@ -25,7 +25,9 @@ function def_json($url, array $data = [], $callback = null)
         }
     }
 
-    file_put_contents($url, $json);
+    if (!empty($url)) {
+        file_put_contents($url, $json);
+    }
 
     if (is_callable($callback)) {
         $callback($json);
